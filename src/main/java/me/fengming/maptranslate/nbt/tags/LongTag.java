@@ -13,6 +13,14 @@ public class LongTag implements Tag {
         }
     };
 
+    public long getData() {
+        return data;
+    }
+
+    public void setData(long data) {
+        this.data = data;
+    }
+
     public static LongTag valueOf(long data) {
         return data >= -128L && data <= 1024L ? LongTag.Cache.cache[(int)data - -128] : new LongTag(data);
     }

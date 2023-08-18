@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 public class ShortTag implements Tag {
-    private final short data;
+    private short data;
     public static TagType<ShortTag> TYPE = new TagType<ShortTag>() {
         @Override
         public ShortTag load(DataInput data) throws IOException {
@@ -13,6 +13,14 @@ public class ShortTag implements Tag {
     };
 
     public ShortTag(short data) {
+        this.data = data;
+    }
+
+    public short getData() {
+        return data;
+    }
+
+    public void setData(short data) {
         this.data = data;
     }
 

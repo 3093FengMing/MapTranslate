@@ -26,8 +26,17 @@ public class CompoundTag implements Tag {
         }
     };
     public Tag get(String name) {
-        return data.get(name);
+        return data.getOrDefault(name, EndTag.INSTANCE);
     }
+
+    public Map<String, Tag> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Tag> data) {
+        this.data = data;
+    }
+
     public Tag put(String name, Tag tag) {
         return data.put(name, tag);
     }
@@ -53,7 +62,7 @@ public class CompoundTag implements Tag {
     @Override
     public String toString() {
         return "CompoundTag{" +
-                "data=" + data +
+                "data=" + data.toString() +
                 '}';
     }
 }

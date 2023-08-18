@@ -1,6 +1,8 @@
 package me.fengming.maptranslate.regoin;
 
 import me.fengming.maptranslate.nbt.tags.CompoundTag;
+import me.fengming.maptranslate.nbt.tags.EndTag;
+import me.fengming.maptranslate.nbt.tags.IntTag;
 
 public class ChunkData {
     private final CompoundTag data;
@@ -10,6 +12,22 @@ public class ChunkData {
         this.data = levelTag;
         this.x = x;
         this.z = z;
+    }
+
+    public boolean isLevel() {
+        return (data.get("Entities") instanceof EndTag);
+    }
+
+    public CompoundTag getData() {
+        return data;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getZ() {
+        return z;
     }
 
     @Override

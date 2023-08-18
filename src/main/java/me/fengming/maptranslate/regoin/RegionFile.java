@@ -24,9 +24,12 @@ public class RegionFile {
     private final IntBuffer offsets;
     private final IntBuffer timestamps;
     private FileChannel file;
+    private String fileName;
 
     public RegionFile(File f, Alert alert) throws IOException {
         Path regionFile = f.toPath();
+        this.fileName = f.getName();
+
 
         this.file = FileChannel.open(regionFile, StandardOpenOption.READ);
 
@@ -98,10 +101,11 @@ public class RegionFile {
                 }
             }
         }
-        System.out.println("f = " + f);
-        System.out.println("chunks = " + chunks);
 
+    }
 
+    public List<ChunkData> getChunks() {
+        return chunks;
     }
 
     public byte[] decompress(byte[] data, byte chunkVersion) throws IOException {
@@ -151,6 +155,11 @@ public class RegionFile {
     }
     private static byte getExternalChunkVersion(byte pVersionByte) {
         return (byte)(pVersionByte & -129);
+    }
+
+    public String getFileName() {
+        String[] s = fileName.split("\\.");
+        return s[0] + s[1] + "." + s[2];
     }
 
 }

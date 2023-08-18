@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListTag implements Tag {
-    private final List<Tag> list;
-    private final byte type;
+    private List<Tag> list;
+    private byte type;
     public static TagType<ListTag> TYPE = new TagType<ListTag>() {
         @Override
         public ListTag load(DataInput data) throws IOException {
@@ -25,6 +25,13 @@ public class ListTag implements Tag {
             return new ListTag(list, type);
         }
     };
+
+    public List<Tag> getList() {
+        return list;
+    }
+    public void setList(List<Tag> list) {
+        this.list = list;
+    }
 
     public ListTag(List<Tag> list, byte type) {
         this.list = list;

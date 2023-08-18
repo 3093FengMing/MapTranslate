@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 public class LongArrayTag implements Tag {
-    private final long[] data;
+    private long[] data;
     public static TagType<LongArrayTag> TYPE = new TagType<LongArrayTag>() {
         @Override
         public LongArrayTag load(DataInput data) throws IOException {
@@ -16,6 +16,14 @@ public class LongArrayTag implements Tag {
             return new LongArrayTag(longs);
         }
     };
+
+    public long[] getData() {
+        return data;
+    }
+
+    public void setData(long[] data) {
+        this.data = data;
+    }
 
     public LongArrayTag(long[] b) {
         this.data = b;

@@ -15,6 +15,10 @@ public class ByteArrayTag implements Tag {
         }
     };
 
+    public byte[] getData() {
+        return data;
+    }
+
     public ByteArrayTag(byte[] b) {
         this.data = b;
     }

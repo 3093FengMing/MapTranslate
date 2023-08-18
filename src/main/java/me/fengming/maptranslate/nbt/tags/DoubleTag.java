@@ -14,6 +14,10 @@ public class DoubleTag implements Tag {
         }
     };
 
+    public double getData() {
+        return data;
+    }
+
     public DoubleTag(double data) {
         this.data = data;
     }

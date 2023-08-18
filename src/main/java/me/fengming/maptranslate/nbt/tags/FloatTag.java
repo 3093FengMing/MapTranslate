@@ -14,6 +14,14 @@ public class FloatTag implements Tag {
         }
     };
 
+    public float getData() {
+        return data;
+    }
+
+    public void setData(float data) {
+        this.data = data;
+    }
+
     public FloatTag(float data) {
         this.data = data;
     }

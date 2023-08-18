@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 public class ByteTag implements Tag {
-    private final byte data;
+    private byte data;
     public static TagType<ByteTag> TYPE = new TagType<ByteTag>() {
         @Override
         public ByteTag load(DataInput data) throws IOException {
@@ -18,6 +18,14 @@ public class ByteTag implements Tag {
 
     public static ByteTag valueOf(byte b) {
         return Cache.cache[128 + b];
+    }
+
+    public byte getData() {
+        return data;
+    }
+
+    public void setData(byte data) {
+        this.data = data;
     }
 
     static class Cache {

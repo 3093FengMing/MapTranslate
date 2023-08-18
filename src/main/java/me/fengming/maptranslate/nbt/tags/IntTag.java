@@ -22,6 +22,10 @@ public class IntTag implements Tag {
         return data >= -128 && data <= 1024 ? IntTag.Cache.cache[data - -128] : new IntTag(data);
     }
 
+    public int getData() {
+        return this.data;
+    }
+
     static class Cache {
         private static final int HIGH = 1024;
         private static final int LOW = -128;

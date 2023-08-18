@@ -29,6 +29,7 @@ public class RegionReader {
         for (File file : files) {
             if (file.getName().endsWith(".mca")) {
                 regions.add(read(file));
+                System.out.println("regions = " + regions);
             } else {
                 alert.setContentText(file + " isn't a mca file!");
                 return;
@@ -37,5 +38,9 @@ public class RegionReader {
     }
     public RegionFile read(File f) throws IOException {
         return new RegionFile(f, alert);
+    }
+
+    public List<RegionFile> getRegions() {
+        return regions;
     }
 }
