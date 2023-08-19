@@ -44,6 +44,9 @@ public class CompoundTag implements Tag {
     protected CompoundTag(Map<String, Tag> data) {
         this.data = data;
     }
+    public CompoundTag() {
+        this.data = new HashMap<>();
+    }
     public static byte readNamedTagType(DataInput data) throws IOException {
         return data.readByte();
     }

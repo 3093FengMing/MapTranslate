@@ -7,14 +7,24 @@ public class ChunkData {
     private final CompoundTag data;
     private final int x;
     private final int z;
-    public ChunkData(CompoundTag levelTag, int x, int z) {
+    private final boolean isNew;
+    private boolean isLevel;
+    public ChunkData(CompoundTag levelTag, int x, int z, boolean isNew) {
         this.data = levelTag;
         this.x = x;
         this.z = z;
+        this.isNew = isNew;
+    }
+
+    public boolean isNewVersion() {
+        return this.isNew;
+    }
+    public void setLevel(boolean isLevel) {
+        this.isLevel = isLevel;
     }
 
     public boolean isLevel() {
-        return (data.get("Entities") instanceof EndTag);
+        return isLevel;
     }
 
     public CompoundTag getData() {

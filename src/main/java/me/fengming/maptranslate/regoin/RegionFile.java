@@ -3,6 +3,7 @@ package me.fengming.maptranslate.regoin;
 import javafx.scene.control.Alert;
 import me.fengming.maptranslate.models.nbt.NbtIO;
 import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
+import me.fengming.maptranslate.models.nbt.tags.EndTag;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -95,8 +96,23 @@ public class RegionFile {
                     } else {
                         stream = new DataInputStream(new ByteArrayInputStream(decompress(new ByteArrayInputStream(bytebuffer.array(), bytebuffer.position(), l).readAllBytes(), version)));
                     }
-                    CompoundTag tag = (CompoundTag) NbtIO.read(stream);
-                    chunks.add(new ChunkData(tag, i, j));
+                    CompoundTag dataTag = (CompoundTag) NbtIO.read(stream);
+                    ChunkData dataChunk;
+
+                    if (dataTag.get("Level") instanceof EndTag) { // new version (Anvil)
+                        dataChunk = new ChunkData(dataTag, i, j, true);
+                    } else { // old version (MCRegion)
+                        dataTag = (CompoundTag) dataTag.get("Level");
+                        dataChunk = new ChunkData(dataTag, i, j, false);
+                    }
+
+                    if (dataTag.get("Status") instanceof EndTag) { // entities chunk
+                        dataChunk.setLevel(false);
+                        chunks.add(dataChunk);
+                    } else if (dataTag.get("Status").getData().equals("full")) { // region chunk
+                        dataChunk.setLevel(true);
+                        chunks.add(dataChunk);
+                    }
                 }
             }
         }
