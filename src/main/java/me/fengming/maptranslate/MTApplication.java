@@ -1,6 +1,6 @@
 package me.fengming.maptranslate;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,16 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import me.fengming.maptranslate.models.nbt.tags.Tag;
 import me.fengming.maptranslate.regoin.ChunkData;
 import me.fengming.maptranslate.regoin.RegionFile;
 import me.fengming.maptranslate.regoin.RegionReader;
+import me.fengming.maptranslate.models.json.TagJsonSerializer;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -93,15 +92,21 @@ public class MTApplication extends Application {
                 } else {
                     name = "entities." + chunk.getX() + "." + chunk.getZ() + ".json";
                 }
-                String json = new Gson().toJson(chunk.getData());
+                String json = new GsonBuilder()
+                        .registerTypeAdapter(Tag.class, new TagJsonSerializer())
+                        .create()
+                        .toJson(chunk.getData());
                 System.out.println("json = " + json);
                 Path chunkPath = target.toPath().resolve(region.getFileName()).resolve(name);
                 try {
+                    Path parent = chunkPath.getParent();
+                    if (!Files.exists(parent)) {
+                        Files.createDirectory(parent);
+                    }
                     if (!Files.exists(chunkPath)) {
-                        Files.createDirectory(chunkPath.getParent());
                         Files.createFile(chunkPath);
                     }
-                    Files.writeString(chunkPath, json, StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW, StandardOpenOption.SYNC);
+                    Files.writeString(chunkPath, json, StandardOpenOption.WRITE, StandardOpenOption.SYNC);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

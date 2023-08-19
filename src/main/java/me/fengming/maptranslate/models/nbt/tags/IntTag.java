@@ -1,10 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class IntTag implements Tag {
-
+public class IntTag implements NumberTag {
+    
     private int data;
 
     public static TagType<IntTag> TYPE = new TagType<IntTag>() {
@@ -22,7 +22,7 @@ public class IntTag implements Tag {
         return data >= -128 && data <= 1024 ? IntTag.Cache.cache[data - -128] : new IntTag(data);
     }
 
-    public int getData() {
+    public Integer getData() {
         return this.data;
     }
 

@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class ByteTag implements Tag {
+public class ByteTag implements NumberTag {
+    
     private byte data;
     public static TagType<ByteTag> TYPE = new TagType<ByteTag>() {
         @Override
@@ -20,7 +21,7 @@ public class ByteTag implements Tag {
         return Cache.cache[128 + b];
     }
 
-    public byte getData() {
+    public Byte getData() {
         return data;
     }
 

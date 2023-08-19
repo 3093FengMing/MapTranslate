@@ -1,12 +1,11 @@
-package me.fengming.maptranslate.nbt;
+package me.fengming.maptranslate.models.nbt;
 
-import me.fengming.maptranslate.nbt.tags.CompoundTag;
-import me.fengming.maptranslate.nbt.tags.EndTag;
-import me.fengming.maptranslate.nbt.tags.Tag;
+import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
+import me.fengming.maptranslate.models.nbt.tags.EndTag;
+import me.fengming.maptranslate.models.nbt.tags.Tag;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class NbtIO {
     public static Tag read(DataInputStream data) throws IOException {

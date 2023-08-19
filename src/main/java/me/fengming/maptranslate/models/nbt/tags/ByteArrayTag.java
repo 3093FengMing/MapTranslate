@@ -1,10 +1,11 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class ByteArrayTag implements Tag {
-    private final byte[] data;
+public class ByteArrayTag implements ArrayTag {
+
+    private byte[] data;
     public static TagType<ByteArrayTag> TYPE = new TagType<ByteArrayTag>() {
         @Override
         public ByteArrayTag load(DataInput data) throws IOException {
@@ -15,8 +16,16 @@ public class ByteArrayTag implements Tag {
         }
     };
 
-    public byte[] getData() {
-        return data;
+    public Byte[] getData() {
+        Byte[] bytes = new Byte[data.length];
+        for (int i = 0; i < data.length; i++) {
+            bytes[i] = data[i];
+        }
+        return bytes;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public ByteArrayTag(byte[] b) {

@@ -1,6 +1,6 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
-import me.fengming.maptranslate.nbt.TagTypes;
+import me.fengming.maptranslate.models.nbt.TagTypes;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListTag implements Tag {
+    
     private List<Tag> list;
     private byte type;
     public static TagType<ListTag> TYPE = new TagType<ListTag>() {
@@ -26,10 +27,10 @@ public class ListTag implements Tag {
         }
     };
 
-    public List<Tag> getList() {
+    public List<Tag> getData() {
         return list;
     }
-    public void setList(List<Tag> list) {
+    public void setData(List<Tag> list) {
         this.list = list;
     }
 
@@ -38,5 +39,4 @@ public class ListTag implements Tag {
         this.type = type;
     }
 
-    
 }

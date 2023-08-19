@@ -1,6 +1,6 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
-import me.fengming.maptranslate.nbt.TagTypes;
+import me.fengming.maptranslate.models.nbt.TagTypes;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CompoundTag implements Tag {
+    
     private Map<String, Tag> data;
 
     public static TagType<CompoundTag> TYPE = new TagType<CompoundTag>() {

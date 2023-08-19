@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class LongTag implements Tag {
+public class LongTag implements NumberTag {
+    
     private long data;
 
     public static TagType<LongTag> TYPE = new TagType<LongTag>() {
@@ -13,7 +14,7 @@ public class LongTag implements Tag {
         }
     };
 
-    public long getData() {
+    public Long getData() {
         return data;
     }
 

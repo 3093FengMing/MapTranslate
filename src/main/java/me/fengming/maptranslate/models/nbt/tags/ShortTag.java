@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class ShortTag implements Tag {
+public class ShortTag implements NumberTag {
+    
     private short data;
     public static TagType<ShortTag> TYPE = new TagType<ShortTag>() {
         @Override
@@ -16,7 +17,7 @@ public class ShortTag implements Tag {
         this.data = data;
     }
 
-    public short getData() {
+    public Short getData() {
         return data;
     }
 

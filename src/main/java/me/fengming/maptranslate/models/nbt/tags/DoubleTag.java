@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class DoubleTag implements Tag {
+public class DoubleTag implements NumberTag {
+    
     private double data;
     public static final DoubleTag ZERO = new DoubleTag(0.0F);
 
@@ -14,7 +15,7 @@ public class DoubleTag implements Tag {
         }
     };
 
-    public double getData() {
+    public Double getData() {
         return data;
     }
 

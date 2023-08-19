@@ -1,9 +1,8 @@
 package me.fengming.maptranslate.regoin;
 
 import javafx.scene.control.Alert;
-import me.fengming.maptranslate.nbt.NbtIO;
-import me.fengming.maptranslate.nbt.tags.CompoundTag;
-import me.fengming.maptranslate.nbt.tags.Tag;
+import me.fengming.maptranslate.models.nbt.NbtIO;
+import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
 
 import java.io.*;
 import java.nio.ByteBuffer;

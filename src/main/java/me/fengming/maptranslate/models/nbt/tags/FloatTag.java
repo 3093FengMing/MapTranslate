@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class FloatTag implements Tag {
+public class FloatTag implements NumberTag {
+    
     private float data;
     public static final FloatTag ZERO = new FloatTag(0.0F);
 
@@ -14,7 +15,7 @@ public class FloatTag implements Tag {
         }
     };
 
-    public float getData() {
+    public Float getData() {
         return data;
     }
 

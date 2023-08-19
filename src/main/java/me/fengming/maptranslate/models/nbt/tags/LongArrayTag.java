@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public class LongArrayTag implements Tag {
+public class LongArrayTag implements ArrayTag {
+    
     private long[] data;
     public static TagType<LongArrayTag> TYPE = new TagType<LongArrayTag>() {
         @Override
@@ -17,8 +18,12 @@ public class LongArrayTag implements Tag {
         }
     };
 
-    public long[] getData() {
-        return data;
+    public Long[] getData() {
+        Long[] longs = new Long[data.length];
+        for (int i = 0; i < data.length; i++) {
+            longs[i] = data[i];
+        }
+        return longs;
     }
 
     public void setData(long[] data) {

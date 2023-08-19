@@ -1,4 +1,4 @@
-package me.fengming.maptranslate.nbt.tags;
+package me.fengming.maptranslate.models.nbt.tags;
 
 import java.io.DataInput;
 
@@ -10,4 +10,8 @@ public class EndTag implements Tag {
         }
     };
     public static EndTag INSTANCE = new EndTag();
+
+    public Object getData() {
+        return null;
+    }
 }

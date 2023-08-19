@@ -1,8 +1,7 @@
 package me.fengming.maptranslate.regoin;
 
-import me.fengming.maptranslate.nbt.tags.CompoundTag;
-import me.fengming.maptranslate.nbt.tags.EndTag;
-import me.fengming.maptranslate.nbt.tags.IntTag;
+import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
+import me.fengming.maptranslate.models.nbt.tags.EndTag;
 
 public class ChunkData {
     private final CompoundTag data;
