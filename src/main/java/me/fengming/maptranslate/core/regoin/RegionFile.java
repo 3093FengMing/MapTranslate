@@ -1,9 +1,10 @@
-package me.fengming.maptranslate.regoin;
+package me.fengming.maptranslate.core.regoin;
 
 import javafx.scene.control.Alert;
 import me.fengming.maptranslate.models.nbt.NbtIO;
 import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
 import me.fengming.maptranslate.models.nbt.tags.EndTag;
+import me.fengming.maptranslate.models.nbt.tags.StringTag;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -26,7 +27,7 @@ public class RegionFile {
     private FileChannel file;
     private String fileName;
 
-    public RegionFile(File f, Alert alert) throws IOException {
+    public RegionFile(File f) throws IOException {
         Path regionFile = f.toPath();
         this.fileName = f.getName();
 
@@ -97,21 +98,17 @@ public class RegionFile {
                         stream = new DataInputStream(new ByteArrayInputStream(decompress(new ByteArrayInputStream(bytebuffer.array(), bytebuffer.position(), l).readAllBytes(), version)));
                     }
                     CompoundTag dataTag = (CompoundTag) NbtIO.read(stream);
-                    ChunkData dataChunk;
+                    boolean isNew = true; // new version (1.17.1+)
 
-                    if (dataTag.get("Level") instanceof EndTag) { // new version (Anvil)
-                        dataChunk = new ChunkData(dataTag, i, j, true);
-                    } else { // old version (MCRegion)
+                    if (!(dataTag.get("Level") instanceof EndTag)) { // old version (1.17.1-)
                         dataTag = (CompoundTag) dataTag.get("Level");
-                        dataChunk = new ChunkData(dataTag, i, j, false);
+                        isNew = false;
                     }
 
                     if (dataTag.get("Status") instanceof EndTag) { // entities chunk
-                        dataChunk.setLevel(false);
-                        chunks.add(dataChunk);
-                    } else if (dataTag.get("Status").getData().equals("full")) { // region chunk
-                        dataChunk.setLevel(true);
-                        chunks.add(dataChunk);
+                        chunks.add(new ChunkData(dataTag, i, j, isNew, false));
+                    } else if (((StringTag) dataTag.get("Status")).getData().endsWith("full")) { // region chunk (minecraft:full or full)
+                        chunks.add(new ChunkData(dataTag, i, j, isNew, true));
                     }
                 }
             }

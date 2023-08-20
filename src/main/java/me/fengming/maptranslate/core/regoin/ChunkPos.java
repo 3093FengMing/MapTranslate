@@ -1,4 +1,4 @@
-package me.fengming.maptranslate.regoin;
+package me.fengming.maptranslate.core.regoin;
 
 public class ChunkPos {
     private int x;

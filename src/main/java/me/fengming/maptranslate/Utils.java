@@ -5,17 +5,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Region;
 import me.fengming.maptranslate.models.nbt.tags.*;
 
 import java.util.List;
 
 public class Utils {
-    public static double getMidX(Region region, Node node) {
-        return (region.getWidth() - node.getLayoutBounds().getWidth()) / 2;
-    }
-    public static double getMidY(Region region, Node node) {
-        return (region.getHeight() - node.getLayoutBounds().getHeight()) / 2;
+    public static void alertMessage(Alert alert, String m) {
+        TextArea area = new TextArea(m);
+        area.setEditable(false);
+        alert.setGraphic(area);
+        alert.showAndWait();
     }
     public static JsonElement tag2Element(Tag tag) {
         if (tag instanceof ArrayTag at) { // ByteArray, IntArray, LongArray
@@ -39,5 +41,8 @@ public class Utils {
             ct.getData().forEach((key, value) -> object.add(key, tag2Element(value)));
             return object;
         } else return new JsonObject();
+    }
+    public static Tag Element2tag(JsonElement element) {
+        return null;
     }
 }

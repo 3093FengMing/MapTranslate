@@ -11,10 +11,11 @@ import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
+import me.fengming.maptranslate.models.nbt.tags.ListTag;
 import me.fengming.maptranslate.models.nbt.tags.Tag;
-import me.fengming.maptranslate.regoin.ChunkData;
-import me.fengming.maptranslate.regoin.RegionFile;
-import me.fengming.maptranslate.regoin.RegionReader;
+import me.fengming.maptranslate.core.regoin.ChunkData;
+import me.fengming.maptranslate.core.regoin.RegionFile;
+import me.fengming.maptranslate.core.regoin.RegionReader;
 import me.fengming.maptranslate.models.json.TagJsonSerializer;
 
 import java.io.File;
@@ -30,21 +31,38 @@ public class MTApplication extends Application {
         root.setPadding(new Insets(10, 0, 60, 0));
         stage.setTitle("Map Translate V0.1.0");
 
+        // Text
+        VBox vb2 = new VBox();
+        Label text3 = new Label("Map Translate Tool By FengMing3093");
+        vb2.setAlignment(Pos.TOP_CENTER);
+        vb2.getChildren().add(text3);
+
         // Json Setting
+        VBox vb4 = new VBox(4);
+        Label text1 = new Label("------Json Setting------");
         HBox hb1 = new HBox(8);
-        CheckBox buttonCheckPretty = new CheckBox("Json Pretty");
+        CheckBox buttonCheckPretty = new CheckBox("Json Pretty Printing");
+        CheckBox buttonCheckDisableHtmlEscaping = new CheckBox("Json Disable Html Escaping");
         hb1.setAlignment(Pos.CENTER);
-        hb1.getChildren().add(buttonCheckPretty);
+        hb1.getChildren().addAll(buttonCheckPretty, buttonCheckDisableHtmlEscaping);
+        vb4.setAlignment(Pos.CENTER);
+        vb4.getChildren().addAll(text1, hb1);
 
         // DIM
+        VBox vb5 = new VBox(4);
+        Label text4 = new Label("------DIM Setting------");
         HBox hb2 = new HBox(8);
         CheckBox buttonCheckDIMRegion = new CheckBox("DIMRegion");
         CheckBox buttonCheckDIMEntities = new CheckBox("DIMEntities");
         hb2.setAlignment(Pos.CENTER);
         hb2.getChildren().addAll(buttonCheckDIMRegion, buttonCheckDIMEntities);
-        hb2.setVisible(false);
+        vb5.setAlignment(Pos.CENTER);
+        vb5.getChildren().addAll(text4, hb2);
+        vb5.setVisible(false);
 
         // Main
+        VBox vb3 = new VBox(4);
+        Label text2 = new Label("------Action Setting------");
         HBox hb3 = new HBox(8);
         CheckBox buttonCheckDatapack = new CheckBox("Datapacks");
         CheckBox buttonCheckDIM = new CheckBox("DIM");
@@ -52,76 +70,102 @@ public class MTApplication extends Application {
         CheckBox buttonCheckEntities = new CheckBox("Entities");
         hb3.setAlignment(Pos.CENTER);
         hb3.getChildren().addAll(buttonCheckDatapack, buttonCheckRegion, buttonCheckEntities, buttonCheckDIM);
-        buttonCheckDIM.setOnAction(event -> hb2.setVisible(buttonCheckDIM.isSelected()));
+        vb3.setAlignment(Pos.CENTER);
+        vb3.getChildren().addAll(text2, hb3);
+        buttonCheckDIM.setOnAction(event -> vb5.setVisible(buttonCheckDIM.isSelected()));
 
-        // Text
-        Label text = new Label("Map Translate Tool By FengMing3093");
-        VBox vb2 = new VBox(text);
-        vb2.setAlignment(Pos.CENTER);
+        // Action
+        VBox vb6 = new VBox(4);
+        Label text5 = new Label("------Action------");
+        HBox hb4 = new HBox(8);
+        Button buttonReadMap = new Button("Extract");
+        Button buttonWriteMap = new Button("Restore");
+        buttonReadMap.setOnAction(event -> readButton(stage, buttonCheckPretty.isSelected(), buttonCheckDisableHtmlEscaping.isSelected(), buttonCheckRegion.isSelected(), buttonCheckEntities.isSelected(), buttonCheckDatapack.isSelected(), buttonCheckDIMRegion.isSelected(), buttonCheckDIMEntities.isSelected()));
+        buttonWriteMap.setOnAction(event -> writeButton(stage));
+        hb4.getChildren().addAll(buttonReadMap, buttonWriteMap);
+        hb4.setAlignment(Pos.CENTER);
+        vb6.setAlignment(Pos.BOTTOM_CENTER);
+        vb6.getChildren().addAll(text5, hb4);
 
-        // Vbox
-        VBox vb = new VBox();
-        Button buttonOpenMapFolder = new Button("Open Map Folder");
-        buttonOpenMapFolder.setOnAction(event -> button(stage, buttonCheckPretty.isSelected()));
-        vb.setAlignment(Pos.CENTER);
-        vb.getChildren().add(buttonOpenMapFolder);
+        // Add Components
         VBox vb1 = new VBox(20);
-
-        vb1.getChildren().addAll(vb2, hb1, hb3, hb2);
+        vb1.getChildren().addAll(vb2, vb4, vb3, vb5, vb6);
 
         root.setTop(vb1);
-        root.setCenter(vb);
 
         stage.setScene(main);
         stage.show();
     }
 
-    private static void button(Stage stage, boolean pretty) {
+    private static void readButton(Stage stage, boolean pretty, boolean disableEscaping, boolean region, boolean entities, boolean datapacks, boolean dimregion, boolean dimentities) {
         DirectoryChooser dc1 = new DirectoryChooser();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Done! Check the following!");
-        RegionReader rr = new RegionReader(dc1.showDialog(stage).toPath().resolve("region").toFile(), alert);
-        try {
-            rr.readAll();
-            alert.getDialogPane().setExpandableContent(new TextArea("Nothing, you can take the next step now!"));
-        } catch (Exception e) {
-            alert.getDialogPane().setExpandableContent(new TextArea(e.getMessage()));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Check the information!");
+        alert.setHeaderText(" ");
+        File saves = dc1.showDialog(stage);
+        if (saves == null) {
+            Utils.alertMessage(alert, "Save isn't selected!");
+            return;
         }
-        alert.showAndWait();
+        if (!Files.exists(saves.toPath().resolve("level.dat"))) {
+            Utils.alertMessage(alert, "That isn't a save!");
+            return;
+        }
         DirectoryChooser dc2 = new DirectoryChooser();
         File target = dc2.showDialog(stage);
+        if (target == null) {
+            Utils.alertMessage(alert, "Target isn't selected!");
+            return;
+        }
 
-        for (RegionFile region : rr.getRegions()) {
-            CompoundTag regionData = new CompoundTag();
-            for (ChunkData chunk : region.getChunks()) {
-                CompoundTag data = new CompoundTag();
-                if (chunk.isLevel()) {
-                    data.put("tilesEntities", chunk.isNewVersion() ? chunk.getData().get("block_entities") : chunk.getData().get("TileEntities"));
-                } else {
-                    data.put("entities", chunk.getData());
+        GsonBuilder builder = new GsonBuilder()
+                .registerTypeAdapter(Tag.class, new TagJsonSerializer());
+        if (disableEscaping) builder.disableHtmlEscaping();
+        if (pretty) builder.setPrettyPrinting();
+        Gson gson = builder.create();
+
+        // region
+        if (region) {
+            RegionReader rr = new RegionReader(saves.toPath().resolve("region").toFile(), alert);
+            rr.readAll();
+            rr.writeFiles(target.toPath().resolve("region"), gson);
+        }
+        // entities
+        if (entities) {
+            RegionReader er = new RegionReader(saves.toPath().resolve("entities").toFile(), alert);
+            er.readAll();
+            er.writeFiles(target.toPath().resolve("entities"), gson);
+        }
+
+        // DIM region
+        if (dimregion) {
+            for (File file : saves.listFiles()) {
+                String fileName = file.getName();
+                if (file.isDirectory() && fileName.startsWith("DIM")) {
+                    RegionReader rr = new RegionReader(saves.toPath().resolve(fileName).resolve("region").toFile(), alert);
+                    rr.readAll();
+                    rr.writeFiles(target.toPath().resolve(fileName).resolve("region"), gson);
                 }
-                regionData.put(chunk.getX() + "#" + chunk.getZ(), data);
-            }
-
-            GsonBuilder gson = new GsonBuilder()
-                    .registerTypeAdapter(Tag.class, new TagJsonSerializer());
-            if (pretty) gson.setPrettyPrinting();
-
-            String json = gson.create().toJson(regionData);
-
-            Path chunkPath = target.toPath().resolve(region.getFileName() + ".json");
-            try {
-                Path parent = chunkPath.getParent();
-                if (!Files.exists(parent)) {
-                    Files.createDirectory(parent);
-                }
-                if (!Files.exists(chunkPath)) {
-                    Files.createFile(chunkPath);
-                }
-                Files.writeString(chunkPath, json, StandardOpenOption.WRITE, StandardOpenOption.SYNC);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
+        // DIM entities
+        if (dimentities) {
+            for (File file : saves.listFiles()) {
+                String fileName = file.getName();
+                if (file.isDirectory() && fileName.startsWith("DIM")) {
+                    RegionReader er = new RegionReader(saves.toPath().resolve("entities").toFile(), alert);
+                    er.readAll();
+                    er.writeFiles(target.toPath().resolve(fileName).resolve("entities"), gson);
+                }
+            }
+        }
+
+        // datapack
+        // TODO
+
+        Utils.alertMessage(alert, "Completed, please check the folder " + target + " !");
+    }
+    private static void writeButton(Stage stage) {
+
     }
 
     public static void main(String[] args) {
