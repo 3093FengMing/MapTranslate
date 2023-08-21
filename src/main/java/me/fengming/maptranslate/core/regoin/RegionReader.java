@@ -9,6 +9,7 @@ import me.fengming.maptranslate.models.nbt.tags.Tag;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -58,7 +59,8 @@ public class RegionReader extends DataReader<RegionFile> {
                 CompoundTag data = new CompoundTag();
                 if (chunk.isLevel()) {
                     Tag tiles = chunk.isNewVersion() ? chunk.getData().get("block_entities") : chunk.getData().get("TileEntities");
-                    if (tiles instanceof ListTag lt) {
+                    if (tiles instanceof ListTag) {
+                        ListTag lt = (ListTag) tiles;
                         if (lt.getData().isEmpty()) continue;
                         data.put("tilesEntities", lt);
                     } else continue;
@@ -79,7 +81,7 @@ public class RegionReader extends DataReader<RegionFile> {
                     Files.createDirectory(parent);
                 }
                 Files.deleteIfExists(regionFile);
-                Files.writeString(regionFile, json, StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
+                Files.write(regionFile, json.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
             } catch (Exception e) {
                 outputMessage(e.getMessage());
             }

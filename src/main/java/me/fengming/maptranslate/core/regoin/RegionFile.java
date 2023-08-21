@@ -89,13 +89,13 @@ public class RegionFile {
                         String s = "c." + pos.getX() + "." + pos.getZ() + ".mcc";
                         Path path = regionFile.getParent().resolve(s);
                         if (Files.isRegularFile(path)) continue;
-                        stream = new DataInputStream(new ByteArrayInputStream(decompress(Files.newInputStream(path).readAllBytes(), getExternalChunkVersion(version))));
+                        stream = new DataInputStream(new ByteArrayInputStream(decompress(Files.newInputStream(path), getExternalChunkVersion(version))));
                     } else if (l > bytebuffer.remaining()) {
                         continue;
                     } else if (l < 0) {
                         continue;
                     } else {
-                        stream = new DataInputStream(new ByteArrayInputStream(decompress(new ByteArrayInputStream(bytebuffer.array(), bytebuffer.position(), l).readAllBytes(), version)));
+                        stream = new DataInputStream(new ByteArrayInputStream(decompress(new ByteArrayInputStream(bytebuffer.array(), bytebuffer.position(), l), version)));
                     }
                     CompoundTag dataTag = (CompoundTag) NbtIO.read(stream);
                     boolean isNew = true; // new version (1.17.1+)
@@ -120,17 +120,22 @@ public class RegionFile {
         return chunks;
     }
 
-    public byte[] decompress(byte[] data, byte chunkVersion) throws IOException {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+    public byte[] decompress(InputStream data, byte chunkVersion) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         InputStream inputStream = null;
         byte[] bytes = new byte[1024];
         int read;
 
         switch (chunkVersion) {
-            case 1 -> inputStream = new GZIPInputStream(byteArrayInputStream);
-            case 2 -> inputStream = new InflaterInputStream(byteArrayInputStream);
-            case 3 -> {
+            case 1 : {
+                inputStream = new GZIPInputStream(data);
+                break;
+            }
+            case 2 :{
+                inputStream = new InflaterInputStream(data);
+                break;
+            }
+            case 3 : {
                 return bytes;
             }
         }

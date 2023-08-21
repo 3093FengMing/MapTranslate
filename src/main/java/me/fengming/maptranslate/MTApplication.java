@@ -26,7 +26,7 @@ import java.nio.file.StandardOpenOption;
 public class MTApplication extends Application {
     @Override
     public void start(Stage stage) {
-        Scene main = new Scene(new BorderPane(), 400, 300);
+        Scene main = new Scene(new BorderPane(), 450, 340);
         BorderPane root = (BorderPane) main.getRoot();
         root.setPadding(new Insets(10, 0, 60, 0));
         stage.setTitle("Map Translate V0.1.0");
@@ -142,15 +142,13 @@ public class MTApplication extends Application {
             String fileName = file.getName();
             if (file.isDirectory() && fileName.startsWith("DIM")) {
                 // DIM region
-                if (dimregion) {
-                    if (Files.notExists(file.toPath().resolve("region"))) continue;
+                if (dimregion && Files.exists(file.toPath().resolve("region"))) {
                     RegionReader rr = new RegionReader(saves.toPath().resolve(fileName).resolve("region").toFile(), alert);
                     rr.readAll();
                     rr.writeFiles(target.toPath().resolve(fileName).resolve("region"), gson);
                 }
                 // DIM entities
-                if (dimentities) {
-                    if (Files.notExists(file.toPath().resolve("entities"))) continue;
+                if (dimentities && Files.exists(file.toPath().resolve("entities"))) {
                     RegionReader er = new RegionReader(saves.toPath().resolve("entities").toFile(), alert);
                     er.readAll();
                     er.writeFiles(target.toPath().resolve(fileName).resolve("entities"), gson);
@@ -168,6 +166,6 @@ public class MTApplication extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

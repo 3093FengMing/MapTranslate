@@ -20,25 +20,25 @@ public class Utils {
         alert.showAndWait();
     }
     public static JsonElement tag2Element(Tag tag) {
-        if (tag instanceof ArrayTag at) { // ByteArray, IntArray, LongArray
-            Object[] data = at.getData();
+        if (tag instanceof ArrayTag) { // ByteArray, IntArray, LongArray
+            Object[] data = ((ArrayTag) tag).getData();
             JsonArray array = new JsonArray(data.length);
             for (Object o : data) {
                 array.add((Number) o);
             }
             return array;
-        } else if (tag instanceof NumberTag nt) { // ByteTag, DoubleTag, FloatTag, IntTag, LongTag, ShortTag
-            return new JsonPrimitive(nt.getData());
-        } else if (tag instanceof StringTag st) {
-            return new JsonPrimitive(st.getData());
-        } else if (tag instanceof ListTag lt) {
-            List<Tag> data = lt.getData();
+        } else if (tag instanceof NumberTag) { // ByteTag, DoubleTag, FloatTag, IntTag, LongTag, ShortTag
+            return new JsonPrimitive(((NumberTag) tag).getData());
+        } else if (tag instanceof StringTag) {
+            return new JsonPrimitive(((StringTag) tag).getData());
+        } else if (tag instanceof ListTag) {
+            List<Tag> data = ((ListTag) tag).getData();
             JsonArray array = new JsonArray(data.size());
             data.forEach(tag1 -> array.add(tag2Element(tag1)));
             return array;
-        } else if (tag instanceof CompoundTag ct) {
+        } else if (tag instanceof CompoundTag) {
             JsonObject object = new JsonObject();
-            ct.getData().forEach((key, value) -> object.add(key, tag2Element(value)));
+            ((CompoundTag) tag).getData().forEach((key, value) -> object.add(key, tag2Element(value)));
             return object;
         } else return new JsonObject();
     }
