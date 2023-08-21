@@ -110,6 +110,8 @@ public class MTApplication extends Application {
             Utils.alertMessage(alert, "That isn't a save!");
             return;
         }
+
+        Utils.alertMessage(alert, "Select a folder for outputting!");
         DirectoryChooser dc2 = new DirectoryChooser();
         File target = dc2.showDialog(stage);
         if (target == null) {
@@ -136,22 +138,19 @@ public class MTApplication extends Application {
             er.writeFiles(target.toPath().resolve("entities"), gson);
         }
 
-        // DIM region
-        if (dimregion) {
-            for (File file : saves.listFiles()) {
-                String fileName = file.getName();
-                if (file.isDirectory() && fileName.startsWith("DIM")) {
+        for (File file : saves.listFiles()) {
+            String fileName = file.getName();
+            if (file.isDirectory() && fileName.startsWith("DIM")) {
+                // DIM region
+                if (dimregion) {
+                    if (Files.notExists(file.toPath().resolve("region"))) continue;
                     RegionReader rr = new RegionReader(saves.toPath().resolve(fileName).resolve("region").toFile(), alert);
                     rr.readAll();
                     rr.writeFiles(target.toPath().resolve(fileName).resolve("region"), gson);
                 }
-            }
-        }
-        // DIM entities
-        if (dimentities) {
-            for (File file : saves.listFiles()) {
-                String fileName = file.getName();
-                if (file.isDirectory() && fileName.startsWith("DIM")) {
+                // DIM entities
+                if (dimentities) {
+                    if (Files.notExists(file.toPath().resolve("entities"))) continue;
                     RegionReader er = new RegionReader(saves.toPath().resolve("entities").toFile(), alert);
                     er.readAll();
                     er.writeFiles(target.toPath().resolve(fileName).resolve("entities"), gson);

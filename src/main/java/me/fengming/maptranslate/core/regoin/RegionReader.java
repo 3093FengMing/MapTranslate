@@ -71,6 +71,10 @@ public class RegionReader extends DataReader<RegionFile> {
             Path regionFile = f.resolve(region_.getFileName() + ".json");
             try {
                 Path parent = regionFile.getParent();
+                Path parent1 = parent.getParent();
+                if (!Files.exists(parent1)) {
+                    Files.createDirectory(parent1);
+                }
                 if (!Files.exists(parent)) {
                     Files.createDirectory(parent);
                 }

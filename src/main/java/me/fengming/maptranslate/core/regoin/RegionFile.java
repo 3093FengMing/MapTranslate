@@ -171,7 +171,7 @@ public class RegionFile {
 
     public String getFileName() {
         String[] s = fileName.split("\\.");
-        return s[0] + s[1] + "." + s[2];
+        return s[0] + "." + s[1] + "." + s[2];
     }
 
 }
