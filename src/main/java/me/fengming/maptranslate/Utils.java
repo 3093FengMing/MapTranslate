@@ -32,7 +32,7 @@ public class Utils {
         } else if (tag instanceof StringTag) {
             return new JsonPrimitive(((StringTag) tag).getData());
         } else if (tag instanceof ListTag) {
-            List<Tag> data = ((ListTag) tag).getData();
+            List<? extends Tag> data = ((ListTag) tag).getData();
             JsonArray array = new JsonArray(data.size());
             data.forEach(tag1 -> array.add(tag2Element(tag1)));
             return array;

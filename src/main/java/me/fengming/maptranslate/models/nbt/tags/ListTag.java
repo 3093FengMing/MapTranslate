@@ -27,16 +27,22 @@ public class ListTag implements Tag {
         }
     };
 
-    public List<Tag> getData() {
+    public List<? extends Tag> getData() {
         return list;
     }
     public void setData(List<Tag> list) {
         this.list = list;
     }
-
+    public void add(Tag tag) {
+        this.list.add(tag);
+    }
     public ListTag(List<Tag> list, byte type) {
         this.list = list;
         this.type = type;
+    }
+    public ListTag(byte type) {
+       this.list = new ArrayList<>();
+       this.type = type;
     }
 
 }

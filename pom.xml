@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>me.fengming</groupId>
-  <artifactId>MapTranslate</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>map-translate-j8-with-dependencies</artifactId>
+  <version>v0.1.0</version>
   <name>MapTranslate</name>
 
   <properties>
@@ -55,6 +55,12 @@
         <artifactId>maven-shade-plugin</artifactId>
         <version>2.4.3</version>
         <configuration>
+          <artifactSet>
+            <excludes>
+              <exclude>org.junit</exclude>
+              <excluede>org.openjfx</excluede>
+            </excludes>
+          </artifactSet>
           <transformers>
             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
               <mainClass>me.fengming.maptranslate.MTApplication</mainClass>

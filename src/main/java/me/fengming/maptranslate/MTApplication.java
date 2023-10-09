@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import me.fengming.maptranslate.core.datapack.DatapackReader;
 import me.fengming.maptranslate.models.nbt.tags.CompoundTag;
 import me.fengming.maptranslate.models.nbt.tags.ListTag;
 import me.fengming.maptranslate.models.nbt.tags.Tag;
@@ -24,12 +25,13 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 public class MTApplication extends Application {
+
     @Override
     public void start(Stage stage) {
         Scene main = new Scene(new BorderPane(), 450, 340);
         BorderPane root = (BorderPane) main.getRoot();
         root.setPadding(new Insets(10, 0, 60, 0));
-        stage.setTitle("Map Translate V0.1.0");
+        stage.setTitle("Map Translate Tool V0.1.0");
 
         // Text
         VBox vb2 = new VBox();
@@ -81,7 +83,7 @@ public class MTApplication extends Application {
         Button buttonReadMap = new Button("Extract");
         Button buttonWriteMap = new Button("Restore");
         buttonReadMap.setOnAction(event -> readButton(stage, buttonCheckPretty.isSelected(), buttonCheckDisableHtmlEscaping.isSelected(), buttonCheckRegion.isSelected(), buttonCheckEntities.isSelected(), buttonCheckDatapack.isSelected(), buttonCheckDIMRegion.isSelected(), buttonCheckDIMEntities.isSelected()));
-        buttonWriteMap.setOnAction(event -> writeButton(stage));
+        buttonWriteMap.setOnAction(event -> writeButton(stage, buttonCheckRegion.isSelected(), buttonCheckEntities.isSelected(), buttonCheckDatapack.isSelected(), buttonCheckDIMRegion.isSelected(), buttonCheckDIMEntities.isSelected()));
         hb4.getChildren().addAll(buttonReadMap, buttonWriteMap);
         hb4.setAlignment(Pos.CENTER);
         vb6.setAlignment(Pos.BOTTOM_CENTER);
@@ -119,8 +121,7 @@ public class MTApplication extends Application {
             return;
         }
 
-        GsonBuilder builder = new GsonBuilder()
-                .registerTypeAdapter(Tag.class, new TagJsonSerializer());
+        GsonBuilder builder = new GsonBuilder().registerTypeAdapter(Tag.class, new TagJsonSerializer());
         if (disableEscaping) builder.disableHtmlEscaping();
         if (pretty) builder.setPrettyPrinting();
         Gson gson = builder.create();
@@ -157,11 +158,16 @@ public class MTApplication extends Application {
         }
 
         // datapack
+        if (datapacks) {
+            DatapackReader dr = new DatapackReader(saves.toPath().resolve("datapacks").toFile(), alert);
+            dr.readAll();
+            dr.writeFiles(target.toPath().resolve("datapacks"), gson);
+        }
         // TODO
 
         Utils.alertMessage(alert, "Completed, please check the folder " + target + " !");
     }
-    private static void writeButton(Stage stage) {
+    private static void writeButton(Stage stage, boolean region, boolean entities, boolean datapacks, boolean dimregion, boolean dimentities) {
 
     }
 
